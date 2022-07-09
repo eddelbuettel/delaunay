@@ -7,7 +7,8 @@ on:
   pull_request:
 
 env:
-  USE_BSPM: "true"
+  USE_BSPM: "true"  
+  TRIM_APT_SOURCES: "true"
   _R_CHECK_FORCE_SUGGESTS_: "false"
 
 jobs:
@@ -16,7 +17,8 @@ jobs:
       matrix:
         include:
           #- {os: macOS-latest}
-          - {os: ubuntu-latest}
+          #- {os: ubuntu-latest}
+          - {os: ubuntu-22.04}
 
     runs-on: ${{ matrix.os }}
 
