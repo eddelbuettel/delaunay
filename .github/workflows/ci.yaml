@@ -17,21 +17,33 @@ jobs:
       matrix:
         include:
           #- {os: macOS-latest}
-          - {os: ubuntu-latest}
+          #- {os: ubuntu-latest}
+          - name: gcc-11
+            cxx: g++-11
+            cc: gcc-11
+          - name: gcc-12
+            cxx: g++-12
+            cc: gcc-12
 
-    runs-on: ${{ matrix.os }}
+    #runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-22.04
 
     steps:
       - uses: actions/checkout@v2
 
       - name: Bootstrap
         run: |
-          #curl -OLs https://eddelbuettel.github.io/r-ci/run.sh
-          # for now use 'r-ci with r2u' test script instead of standard r-ci
-          curl -OLs https://dirk.eddelbuettel.com/tmp/r2u/run.sh
+          # use 'r2u' variant
+          curl -OLs https://eddelbuettel.github.io/r-ci/r2u/run.sh
           chmod 0755 run.sh
           ./run.sh bootstrap
-
+          
+      - name: Compiler
+        run: |
+          ./run.sh install_aptget ${{ matrix.cxx }}
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/${{ matrix.cc }} 60 --slave /usr/bin/g++ g++ /usr/bin/${{matrix.cxx }}
+          g++ --version
+          
       - name: Dependencies
         run: |
           ./run.sh install_aptget libgmp-dev libmpfr-dev
