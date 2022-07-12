@@ -55,6 +55,8 @@ jobs:
 
       - name: Installation
         run: |
+          mkdir ~/.R
+          echo "CXX14FLAGS=-DBOOST_NO_AUTO_PTR -Wno-ignored-attributes -Wno-deprecated-declarations" > ~/.R/Makevars
           R CMD INSTALL `ls -1t *.tar.gz | head -1`
         
       #- name: Coverage
